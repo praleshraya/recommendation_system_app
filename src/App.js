@@ -84,7 +84,7 @@ function App() {
         <UserDashboard isNewUser={isNewUser} />
       ) : (
         <LoginSignup
-          isLogin={true} // Use a state toggle if needed
+          isLogin={isLoginView} // Use a state toggle if needed
           handleLogin={handleLogin}
           handleSignup={handleSignup}
           setIsLogin={setIsLoginView}
