@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './UserDashboard.css';
 
-const UserDashboard = ({ isNewUser }) => {
+const UserDashboard = ({ isNewUser, handleLogout }) => {
   const [movies, setMovies] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -55,7 +55,7 @@ const UserDashboard = ({ isNewUser }) => {
 
   return (
     <div className="dashboard">
-      <Header handleSearch={handleSearch} />
+      <Header handleSearch={handleSearch} handleLogout={handleLogout} />
       <div className="body-content">
         <div className="wrapper">
           <h2>{isNewUser ? 'Welcome! Top 10 Movies for You' : 'Recommended for You'}</h2>
@@ -75,7 +75,7 @@ const UserDashboard = ({ isNewUser }) => {
 };
 
 // Header component.
-const Header = ({ handleSearch }) => {
+const Header = ({ handleSearch, handleLogout }) => {
   return (
     <header className="header">
       <div className="wrapper">
@@ -85,7 +85,7 @@ const Header = ({ handleSearch }) => {
         </div>
         <div className="user-icon">
           <img src="/path/to/user-icon.png" alt="User" />
-          <button className="logout-button">Logout</button>
+          <button className="logout-button" onClick={handleLogout}>Logout</button>
         </div>
         </div>
     </header>

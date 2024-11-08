@@ -1,18 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import LoginSignup from './components/LoginSignUp';
 import UserDashboard from './components/UserDashboard';
+import AdminDashboard from './components/AdminDashboard';
+
+const API_BASE_URL = process.env.REACT_APP_BASE_API_URL;
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isNewUser, setIsNewUser] = useState(true); // Example of new user state
   const [isLoginView, setIsLoginView] = useState(true); // Toggle between login and signup
+  const [isAdmin, setIsAdmin] = useState(false);
 
+  useEffect(() => {
+    // Check if token exists in localStorage to set initial authentication state
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      setIsAuthenticated(true);
+      checkAdminStatus(token); // Check if the user is an admin
+    }
+  }, []);
+
+  const checkAdminStatus = async (token) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const userData = await response.json();
+        setIsAdmin(userData.role === 'admin');
+      } else {
+        setIsAdmin(false);
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      setIsAdmin(false);
+    }
+  };
 
   const handleLogin = async (formData) => {
     // Logic to verify login (e.g., call an API)
     try {
-      const response = await fetch('http://localhost:8080/login', {
+      const response = await fetch(`${API_BASE_URL}/token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,6 +58,9 @@ function App() {
         const data = await response.json();
         // Handle successful login (e.g., save token, redirect)
         console.log('Login successful:', data);
+        // Save token to localStorage
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('refresh_token', data.refresh_token);
         setIsAuthenticated(true);
         alert('Login successful!');
       } else {
@@ -46,7 +80,7 @@ function App() {
     // Logic to create a new user (e.g., call an API)
     console.log('Signup successful:', formData);
     try {
-      const response = await fetch('http://localhost:8080/signup', {
+      const response = await fetch(`${API_BASE_URL}/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,10 +112,20 @@ function App() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    setIsAuthenticated(false);
+    alert('Logged out successfully');
+  };
+
+
   return (
     <div className="App">
-      {isAuthenticated ? (
-        <UserDashboard isNewUser={isNewUser} />
+      {isAuthenticated && isAdmin ? (
+  <AdminDashboard />
+) : isAuthenticated ? (
+        <UserDashboard isNewUser={isNewUser} handleLogout={handleLogout}/>
       ) : (
         <LoginSignup
           isLogin={isLoginView} // Use a state toggle if needed
