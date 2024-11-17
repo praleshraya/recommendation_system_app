@@ -8,9 +8,9 @@ const API_BASE_URL = process.env.REACT_APP_BASE_API_URL;
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isNewUser, setIsNewUser] = useState(true); // Example of new user state
   const [isLoginView, setIsLoginView] = useState(true); // Toggle between login and signup
   const [isAdmin, setIsAdmin] = useState(false);
+  const [currentUser, setCurrentUser] = useState({})
 
   useEffect(() => {
     // Check if token exists in localStorage to set initial authentication state
@@ -31,6 +31,7 @@ function App() {
       if (response.ok) {
         const userData = await response.json();
         setIsAdmin(userData.role === 'admin');
+        setCurrentUser(userData);
       } else {
         setIsAdmin(false);
       }
@@ -62,6 +63,8 @@ function App() {
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('refresh_token', data.refresh_token);
         setIsAuthenticated(true);
+        setCurrentUser(data.user);
+        setIsAdmin(data.user.role === 'admin');
         alert('Login successful!');
       } else {
         // Handle server errors
@@ -98,7 +101,6 @@ function App() {
         console.log('Signup successful:', data);
         alert('Signup successful!');
         setIsAuthenticated(true);
-        setIsNewUser(true); // Assuming newly registered user
       } else {
         // Handle server errors
         const errorData = await response.json();
@@ -123,9 +125,9 @@ function App() {
   return (
     <div className="App">
       {isAuthenticated && isAdmin ? (
-  <AdminDashboard />
+  <AdminDashboard handleLogout={handleLogout} accessToken={localStorage.getItem('access_token')} user = {currentUser}/>
 ) : isAuthenticated ? (
-        <UserDashboard isNewUser={isNewUser} handleLogout={handleLogout}/>
+        <UserDashboard handleLogout={handleLogout} accessToken={localStorage.getItem('access_token')} user = {currentUser}/>
       ) : (
         <LoginSignup
           isLogin={isLoginView} // Use a state toggle if needed
