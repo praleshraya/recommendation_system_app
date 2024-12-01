@@ -5,17 +5,17 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-  }
-  
-  /* Wrapper for centering content with side margins */
-  .wrapper {
+}
+
+/* Wrapper for centering content with side margins */
+.wrapper {
     max-width: 1200px; /* Set the max width for content */
     margin: 0 auto; /* Center the content */
     padding: 0 20px; /* Add padding on the sides for smaller screens */
   }
   
-  /* Body Content */
-  .body-content {
+/* Body Content */
+.body-content {
     margin-top: 80px; /* Adjust this based on header height */
     padding: 20px 0;
     flex: 1;
@@ -24,230 +24,10 @@
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-  }
-  
-  h2 {
+}
+
+h2 {
     margin-bottom: 15px;
     color: #333;
     text-align: center;
-  }
-  
-  /* Header Styles */
-  .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: #007bff;
-    color: white;
-    padding: 20px 0; /* Add padding for a cleaner look */
-  }
-  
-  .header .wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .search-bar input {
-    padding: 10px;
-    border-radius: 4px;
-    border: none;
-    width: 200px;
-  }
-  
-  .user-icon {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-icon img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  
-  .logout-button {
-    margin-left: 15px;
-    padding: 8px 12px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .logout-button:hover {
-    background-color: #ff1a1a;
-  }
-  
-  /* Movie Row Styles */
-  .movie-row {
-    display: flex;
-    overflow-x: auto;
-    margin-bottom: 20px;
-  }
-  
-  .movie-row::-webkit-scrollbar {
-    height: 6px;
-  }
-  
-  .movie-row::-webkit-scrollbar-thumb {
-    background-color: #ddd;
-    border-radius: 10px;
-  }
-  
-  .movie-item {
-    margin-right: 15px;
-    background-color: white;
-    border-radius: 8px;
-    overflow: hidden;
-    width: 150px;
-    transition: transform 0.3s;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .movie-item img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .movie-item h4 {
-    text-align: center;
-    padding: 10px 0;
-    font-size: 1rem;
-    color: #333;
-  }
-  
-  .movie-item:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Pagination Styles */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .page-item {
-    margin: 0 5px;
-  }
-  
-  .page-link {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    color: #007bff;
-    cursor: pointer;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  
-  .page-link:hover {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  /* Footer Styles */
-  .footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #007bff;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    z-index: 1000;
-  }
-  
-  .footer .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-
-/* Highlight search result section */
-h2 {
-  margin-bottom: 15px;
-  color: #333;
-  text-align: center;
-}
-
-.movie-row {
-  display: flex;
-  overflow-x: auto;
-  margin-bottom: 20px;
-}
-
-.movie-row::-webkit-scrollbar {
-  height: 6px;
-}
-
-.movie-row::-webkit-scrollbar-thumb {
-  background-color: #ddd;
-  border-radius: 10px;
-}
-
-.movie-item {
-  margin-right: 15px;
-  background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-  width: 150px;
-  transition: transform 0.3s;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.movie-item img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.movie-item h4 {
-  text-align: center;
-  padding: 10px 0;
-  font-size: 1rem;
-  color: #333;
-}
-
-.movie-item:hover {
-  transform: scale(1.05);
-}
-
-.movie-info {
-  text-align: center;
-}
-
-.watch-button {
-  background-color: #007bff; /* Blue color */
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-top: 5px;
-}
-
-.watch-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-}
-
-.star {
-  font-size: 1.5em;
-  margin: 0 2px;
-}
-
-.star.filled {
-  color: gold;
 }

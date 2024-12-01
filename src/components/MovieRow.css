@@ -1,0 +1,119 @@
+/* Movie Row Styles */
+.movie-row {
+    display: flex;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.movie-row::-webkit-scrollbar {
+    height: 6px;    
+}
+
+.movie-row::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 10px;
+}
+
+.movie-item {
+    margin-right: 15px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 150px;
+    transition: transform 0.3s;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.movie-item h4 {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.movie-item:hover {
+    transform: scale(1.05);
+}
+
+
+/* Highlight search result section */
+h2 {
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+.movie-row {
+    display: flex;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.movie-row::-webkit-scrollbar {
+    height: 6px;
+}
+
+.movie-row::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 10px;
+}
+
+.movie-item {
+    margin-right: 15px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 150px;
+    transition: transform 0.3s;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.movie-item h4 {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.movie-item:hover {
+    transform: scale(1.05);
+}
+
+.movie-info {
+    text-align: center;
+}
+  
+.watch-button {
+    background-color: #007bff; /* Blue color */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+  
+.watch-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+  
+.star {
+    font-size: 1.5em;
+    margin: 0 2px;
+}
+  
+.star.filled {
+    color: gold;
+}

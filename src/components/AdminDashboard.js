@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './AdminDashboard.css';
 
+import Header from './Header';
+import Pagination from './Pagination';
+import { AuthContext } from './AuthContext';
 
-const AdminDashboard = ({ handleLogout, accessToken, user }) => {
+
+const AdminDashboard = () => {
+  const { currentUser, logout } = useContext(AuthContext);
   const [movies, setMovies] = useState([]);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,7 +31,8 @@ const AdminDashboard = ({ handleLogout, accessToken, user }) => {
     poster: ''
   });
 
-  const API_URL = 'http://localhost:8000';
+  const API_URL = process.env.REACT_APP_BASE_API_URL;
+
   const fetchMovies = async (pageNumber = 1, query = '') => {
     setLoading(true);
     setError(null);
@@ -48,7 +54,7 @@ const AdminDashboard = ({ handleLogout, accessToken, user }) => {
   
       const response = await fetch(url, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
       });
   
@@ -157,7 +163,7 @@ const AdminDashboard = ({ handleLogout, accessToken, user }) => {
 
   return (
     <div className="admin-dashboard">
-      <Header handleSearch={handleSearch} handleLogout={handleLogout} user = {user}/>
+      <Header handleSearch={handleSearch} handleLogout={logout} user = {currentUser}/>
       <div className="admin-dashboard"></div>
       <button onClick={() => setIsAdding(true)}>Add New Movie</button>
       {isAdding && (
@@ -216,80 +222,6 @@ const AdminDashboard = ({ handleLogout, accessToken, user }) => {
         />
     </div>
   );
-};
-
-// Header component.
-const Header = ({ handleSearch, handleLogout, user }) => {
-  return (
-    <header className="header">
-      <div className="wrapper">
-        <div className="logo">Movie Recommender (Admin Dashboard)</div>
-        <div className="search-bar">
-          <input type="text" placeholder="Search movies..." onChange={handleSearch} />
-        </div>
-        <div className="user-icon">
-          <img src="/path/to/user-icon.png" alt={user ? user.user_name : "User"} />
-          <button className="logout-button" onClick={handleLogout}>Logout</button>
-        </div>
-        </div>
-    </header>
-  );
-};
-
-
-// Pagination components
-const Pagination = ({ moviesPerPage, totalMovies, currentPage, paginate }) => {
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(totalMovies / moviesPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  const maxPageNumbersToShow = 5;
-  const startPage = Math.max(currentPage - 2, 1);
-  const endPage = Math.min(startPage + maxPageNumbersToShow - 1, pageNumbers.length);
-
-  return (
-    <nav>
-      <ul className="pagination">
-        {startPage > 1 && (
-          <>
-            <li className="page-item">
-              <a onClick={() => paginate(1)} href="#!" className="page-link">
-                First
-              </a>
-            </li>
-            <li className="page-item">...</li>
-          </>
-        )}
-        {pageNumbers.slice(startPage - 1, endPage).map((number) => (
-          <li
-            key={number}
-            className={`page-item ${currentPage === number ? 'active' : ''}`}
-          >
-            <a onClick={() => paginate(number)} href="#!" className="page-link">
-              {number}
-            </a>
-          </li>
-        ))}
-        {endPage < pageNumbers.length && (
-          <>
-            <li className="page-item">...</li>
-            <li className="page-item">
-              <a onClick={() => paginate(pageNumbers.length)} href="#!" className="page-link">
-                Last
-              </a>
-            </li>
-          </>
-        )}
-      </ul>
-    </nav>
-  );
-};
-
-
-// Footer components
-const Footer = () => {
-  return <footer className="footer"><div className="wrapper">© 2024 Movie Recommender</div></footer>;
 };
 
 
