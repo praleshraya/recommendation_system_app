@@ -1,137 +1,160 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+
 import './UserDashboard.css';
 
-const UserDashboard = ({ isNewUser }) => {
-  const [movies, setMovies] = useState([]);
-  const [recommendations, setRecommendations] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const moviesPerPage = 10;
+import Header from './Header';
+import Footer from './Footer';
+import MovieRow from './MovieRow';
+import Pagination from './Pagination';
+import { AuthContext } from './AuthContext';
 
-  // Dummy movie data // Fetch all movies data using API. 
-  const allMovies = [
-    { id: 1, title: 'Inception', poster: 'https://via.placeholder.com/150' },
-    { id: 2, title: 'Interstellar', poster: 'https://via.placeholder.com/150' },
-    { id: 3, title: 'The Dark Knight', poster: 'https://via.placeholder.com/150' },
-    { id: 4, title: 'Fight Club', poster: 'https://via.placeholder.com/150' },
-    { id: 5, title: 'The Matrix', poster: 'https://via.placeholder.com/150' },
-    { id: 6, title: 'Forrest Gump', poster: 'https://via.placeholder.com/150' },
-    { id: 7, title: 'The Social Network', poster: 'https://via.placeholder.com/150' },
-    { id: 8, title: 'Gladiator', poster: 'https://via.placeholder.com/150' },
-    { id: 9, title: 'The Godfather', poster: 'https://via.placeholder.com/150' },
-    { id: 10, title: 'Shawshank Redemption', poster: 'https://via.placeholder.com/150' },
-    { id: 11, title: 'Pulp Fiction', poster: 'https://via.placeholder.com/150' },
-    { id: 12, title: 'Titanic', poster: 'https://via.placeholder.com/150' },
-  ];
 
-  useEffect(() => {
-    setMovies(allMovies); // Fetch all movies data using API. 
+const API_BASE_URL = process.env.REACT_APP_BASE_API_URL;
 
-    const top10Movies = allMovies.slice(0, 10); // top 10 recommended movied for that user id using API
-    const similarMovies = allMovies.slice(10, 20); // pull movies from separate REST API.
-    if (isNewUser) {
-      setRecommendations(top10Movies);
-    } else {
-      setRecommendations(similarMovies);
+const UserDashboard = () => {
+    const { currentUser, logout } = useContext(AuthContext);
+    const [movies, setMovies] = useState([]);
+    const [recommendations, setRecommendations] = useState([]);
+    const [isNewUser, setIsNewUser] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalMovies, setTotalMovies] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [ratings, setRatings] = useState({});
+
+    const moviesPerPage = 10;
+
+    // Fetch Movies for All Users
+    const fetchMovies = async (pageNumber = 1, query = '') => {
+        setLoading(true);
+        setError(null);
+
+        try {
+        const skip = (pageNumber - 1) * moviesPerPage;
+        const url = new URL(`${API_BASE_URL}/movies`);
+        const params = { skip, limit: moviesPerPage };
+
+        if (query) params.search = query;
+        Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));
+
+        const response = await fetch(url, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch movies');
+
+        const data = await response.json();
+        setMovies(data.movies);
+        setTotalMovies(data.total);
+        } catch (err) {
+        setError('Failed to fetch movies. Please try again.');
+        } finally {
+        setLoading(false);
+        }
+    };
+
+  // Fetch Personalized Recommendations
+  const fetchRecommendations = async () => {
+    setError(null);
+
+    try {
+      const url = `${API_BASE_URL}/recommendations/${currentUser.user_id}`;
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch recommendations');
+
+      const data = await response.json();
+      setRecommendations(data.recommendations);
+      setIsNewUser(data.is_new_user);
+    } catch (err) {
+      console.log(err);
+      setError('Failed to fetch recommendations. Please try again.');
+      setRecommendations([]);
     }
-  }, [isNewUser]);
-
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-    const filteredMovies = allMovies.filter((movie) =>
-      movie.title.toLowerCase().includes(query)
-    );
-    setMovies(filteredMovies);
   };
 
+  // Handle Movie Rating
+  const handleRatingClick = async (movieId, ratingValue) => {
+    try {
+      setRatings((prevRatings) => ({ ...prevRatings, [movieId]: ratingValue }));
+      console.log(localStorage.getItem('access_token'));
+      const response = await fetch(`${API_BASE_URL}/ratings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({
+          user_id: currentUser.user_id,
+          movie_id: movieId,
+          rating: ratingValue,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to submit rating');
+
+      alert('Rating submitted successfully!');
+    } catch (err) {
+      console.log(currentUser);
+      alert('Error submitting rating.');
+    }
+  };
+
+  // Search Handler
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value.toLowerCase());
+    setCurrentPage(1); // Reset to the first page
+  };
+
+  // Pagination Handler
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const indexOfLastMovie = currentPage * moviesPerPage;
-  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
-  const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
+  // Fetch data when component mounts or pagination changes
+  useEffect(() => {
+    fetchMovies(currentPage, searchQuery);
+  }, [currentPage, searchQuery]);
+
+  useEffect(() => {
+    fetchRecommendations();
+  }, [currentUser]);
 
   return (
     <div className="dashboard">
-      <Header handleSearch={handleSearch} />
+      <Header handleSearch={handleSearch} handleLogout={logout} user={currentUser} />
       <div className="body-content">
         <div className="wrapper">
+          {loading && <p>Loading...</p>}
+          {error && <p className="error">{error}</p>}
+
           <h2>{isNewUser ? 'Welcome! Top 10 Movies for You' : 'Recommended for You'}</h2>
-          <MovieRow movies={recommendations} />
+          <MovieRow
+            movies={recommendations}
+            ratings={ratings}
+            handleRatingClick={handleRatingClick}
+          />
+
           <h2>All Movies</h2>
-          <MovieRow movies={currentMovies} />
+          <MovieRow
+            movies={movies}
+            ratings={ratings}
+            handleRatingClick={handleRatingClick}
+          />
           <Pagination
             moviesPerPage={moviesPerPage}
-            totalMovies={movies.length}
+            totalMovies={totalMovies}
+            currentPage={currentPage}
             paginate={paginate}
-        />
+          />
         </div>
       </div>
       <Footer />
     </div>
   );
-};
-
-// Header component.
-const Header = ({ handleSearch }) => {
-  return (
-    <header className="header">
-      <div className="wrapper">
-        <div className="logo">Movie Recommender</div>
-        <div className="search-bar">
-          <input type="text" placeholder="Search movies..." onChange={handleSearch} />
-        </div>
-        <div className="user-icon">
-          <img src="/path/to/user-icon.png" alt="User" />
-          <button className="logout-button">Logout</button>
-        </div>
-        </div>
-    </header>
-  );
-};
-
-// Movie Components
-const MovieRow = ({ movies }) => {
-  return (
-    <div className="movie-row">
-      {movies.map((movie, index) => (
-        <div key={index} className="movie-item">
-          <img src={movie.poster} alt={movie.title} />
-          <h4>{movie.title}</h4>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-// Pagination components
-const Pagination = ({ moviesPerPage, totalMovies, paginate }) => {
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(totalMovies / moviesPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  return (
-    <nav>
-      <ul className="pagination">
-        {pageNumbers.map((number) => (
-          <li key={number} className="page-item">
-            <a onClick={() => paginate(number)} href="!#" className="page-link">
-              {number}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-};
-
-
-// Footer components
-const Footer = () => {
-  return <footer className="footer"><div className="wrapper">© 2024 Movie Recommender</div></footer>;
 };
 
 export default UserDashboard;

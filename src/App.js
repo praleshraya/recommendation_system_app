@@ -1,97 +1,43 @@
-import React, { useState } from 'react';
-import './App.css';
-import LoginSignup from './components/LoginSignUp';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, AuthContext } from './components/AuthContext';
+import OTPVerification from './components/OTPVerification';
+import Auth from './components/Auth';
 import UserDashboard from './components/UserDashboard';
+import AdminDashboard from './components/AdminDashboard';
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isNewUser, setIsNewUser] = useState(true); // Example of new user state
-  const [isLoginView, setIsLoginView] = useState(true); // Toggle between login and signup
-
-
-  const handleLogin = async (formData) => {
-    // Logic to verify login (e.g., call an API)
-    try {
-      const response = await fetch('http://localhost:8080/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Handle successful login (e.g., save token, redirect)
-        console.log('Login successful:', data);
-        setIsAuthenticated(true);
-        alert('Login successful!');
-      } else {
-        // Handle server errors
-        const errorData = await response.json();
-        console.error('Login failed:', errorData);
-        alert(`Login failed: ${errorData.detail}`);
-      }
-    } catch (error) {
-      // Handle network errors
-      console.error('Error during login:', error);
-      alert('An error occurred during login. Please try again later.');
-    }
-  };
-
-  const handleSignup = async(formData) => {
-    // Logic to create a new user (e.g., call an API)
-    console.log('Signup successful:', formData);
-    try {
-      const response = await fetch('http://localhost:8080/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Handle successful signup (e.g., display a success message)
-        console.log('Signup successful:', data);
-        alert('Signup successful!');
-        setIsAuthenticated(true);
-        setIsNewUser(true); // Assuming newly registered user
-      } else {
-        // Handle server errors
-        const errorData = await response.json();
-        console.error('Signup failed:', errorData);
-        alert(`Signup failed: ${errorData.detail}`);
-      }
-    } catch (error) {
-      // Handle network errors
-      console.error('Error during signup:', error);
-      alert('An error occurred during signup. Please try again later.');
-    }
-  };
-
+const App = () => {
   return (
-    <div className="App">
-      {isAuthenticated ? (
-        <UserDashboard isNewUser={isNewUser} />
-      ) : (
-        <LoginSignup
-          isLogin={isLoginView} // Use a state toggle if needed
-          handleLogin={handleLogin}
-          handleSignup={handleSignup}
-          setIsLogin={setIsLoginView}
-        />
-      )}
-    </div>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/auth" />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/otp" element={<OTPVerification />} />
+          <Route path="/dashboard/user" element={<ProtectedRoute component={UserDashboard} role='user' />} />
+          <Route path="/dashboard/admin" element={<ProtectedRoute component={AdminDashboard} role='admin'/>} /> */
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
-}
+};
+
+const ProtectedRoute = ({ component: Component, role }) => {
+  const { isAuthenticated, currentUser } = React.useContext(AuthContext);
+  // return isAuthenticated ? <Component /> : <Navigate to="/auth" />;
+
+  if (!isAuthenticated) {
+    console.log('User not authenticated, redirecting to /auth');
+    return <Navigate to="/auth" />;
+  }
+
+  if (role && currentUser?.role !== role) {
+    console.log(`Unauthorized role (${currentUser?.role}), redirecting to correct dashboard`);
+    return <Navigate to={currentUser?.role === 'admin' ? '/dashboard/admin' : '/dashboard/user'} />;
+  }
+
+  console.log('Access granted to component:', Component.name);
+  return <Component />;
+};
 
 export default App;
