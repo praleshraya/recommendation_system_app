@@ -7,7 +7,7 @@ const MovieRow = ({ movies, ratings, handleRatingClick }) => {
       {movies.map((movie) => (
         <div key={movie.movie_id} className="movie-item">
           <img
-            src={movie.poster || 'https://via.placeholder.com/150'}
+            src={movie.poster || 'https://m.media-amazon.com/images/M/MV5BZjMyOTFiZmItMDNmYS00NGIyLWE5ZGYtM2QwN2RlZTlhZjJkXkEyXkFqcGc@._V1_QL75_UY562_CR21,0,380,562_.jpg'}
             alt={movie.title}
             style={{ width: '150px', height: '150px' }}
           />
