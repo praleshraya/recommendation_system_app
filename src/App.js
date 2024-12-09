@@ -11,11 +11,13 @@ const App = () => {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate to="/auth" />} />
+          {/* <Route path="/" element={<Navigate to="/auth" />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/otp" element={<OTPVerification />} />
           <Route path="/dashboard/user" element={<ProtectedRoute component={UserDashboard} role='user' />} />
-          <Route path="/dashboard/admin" element={<ProtectedRoute component={AdminDashboard} role='admin'/>} /> */
+          <Route path="/dashboard/admin" element={<ProtectedRoute component={AdminDashboard} role='admin'/>} />  */}
+        
+        <Route path="/dashboard/user" element={<UserDashboard />} />
         </Routes>
       </Router>
     </AuthProvider>

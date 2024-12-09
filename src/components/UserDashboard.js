@@ -116,11 +116,265 @@ const UserDashboard = () => {
 
   // Fetch data when component mounts or pagination changes
   useEffect(() => {
-    fetchMovies(currentPage, searchQuery);
+    // fetchMovies(currentPage, searchQuery);
+    const moviesList = {
+      "movies": [
+          {
+              "movie_id": 145552,
+              "title": "002 Operation Moon (1965)",
+              "genre": "Franco Franchi,Ciccio Ingrassia,Mónica Randall,Linda Sini",
+              "release_year": 2015,
+              "director": "Lucio Fulci",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 133005,
+              "title": "008: Operation Exterminate (1966)",
+              "genre": "Alberto Lupo,Ingrid Schoeller",
+              "release_year": 2015,
+              "director": "Umberto Lenzi",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 140828,
+              "title": "009-1: The End of the Beginning (2013)",
+              "genre": "Mayuko Iwasa,Minehiro Kinomoto,Nao Nagasawa,Mao Ichimichi,Aya Sugimoto",
+              "release_year": 2015,
+              "director": "Koichi Sakamoto",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": 2
+          },
+          {
+              "movie_id": 101708,
+              "title": "009 Re: Cyborg (2012)",
+              "genre": "Hisao Egawa, Toshiko Fujita, Hiroshi Kamiya",
+              "release_year": 2013,
+              "director": "Kenji Kamiyama",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": 2
+          },
+          {
+              "movie_id": 218781,
+              "title": "0.0MHz (2019)",
+              "genre": "Jung Eun-ji,Lee Sung-yeol,Choi Yoon-young,Shin Ju-hwan",
+              "release_year": 2020,
+              "director": "Yu Seon-dong",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 167748,
+              "title": "00 Schneider - Im Wendekreis der Eidechse (2013)",
+              "genre": "Helge Schneider,Rocko Schamoni,Sergej Gleithmann,Peter Thoms,Pete York",
+              "release_year": 2017,
+              "director": "Helge Schneider",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 157110,
+              "title": "00 Schneider - Jagd auf Nihil Baxter (1994)",
+              "genre": "Helge Schneider,Helmut Körschgen,Andreas Kunze,Otto Van den Berg,Guenther Kordas",
+              "release_year": 2016,
+              "director": "Helge Schneider",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 101462,
+              "title": "03:34 Earthquake in Chile (03:34 Terremoto en Chile) (2011)",
+              "genre": "Marcelo Alonso, Andrea Freund, Fernando Gómez Rovira",
+              "release_year": 2013,
+              "director": "Juan Pablo Ternicier",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 192097,
+              "title": "0.5mm (2014)",
+              "genre": "Sakura Ando,Junkichi Orimoto,Toshio Sakata,Masahiko Tsugawa,Akira Emoto",
+              "release_year": 2018,
+              "director": "Momoko Ando",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": 3
+          },
+          {
+              "movie_id": 204224,
+              "title": "07/27/1978 (2017)",
+              "genre": "John Blyth Barrymore",
+              "release_year": 2019,
+              "director": "Zachary Johnson",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          }
+      ],
+      "total": 84660
+  }
+   setMovies(moviesList.movies);
   }, [currentPage, searchQuery]);
 
   useEffect(() => {
-    fetchRecommendations();
+    // fetchRecommendations();
+
+    const moviesList = {
+      "movies": [
+          {
+              "movie_id": 145552,
+              "title": "002 Operation Moon (1965)",
+              "genre": "Franco Franchi,Ciccio Ingrassia,Mónica Randall,Linda Sini",
+              "release_year": 2015,
+              "director": "Lucio Fulci",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 133005,
+              "title": "008: Operation Exterminate (1966)",
+              "genre": "Alberto Lupo,Ingrid Schoeller",
+              "release_year": 2015,
+              "director": "Umberto Lenzi",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 140828,
+              "title": "009-1: The End of the Beginning (2013)",
+              "genre": "Mayuko Iwasa,Minehiro Kinomoto,Nao Nagasawa,Mao Ichimichi,Aya Sugimoto",
+              "release_year": 2015,
+              "director": "Koichi Sakamoto",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": 2
+          },
+          {
+              "movie_id": 101708,
+              "title": "009 Re: Cyborg (2012)",
+              "genre": "Hisao Egawa, Toshiko Fujita, Hiroshi Kamiya",
+              "release_year": 2013,
+              "director": "Kenji Kamiyama",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": 2
+          },
+          {
+              "movie_id": 218781,
+              "title": "0.0MHz (2019)",
+              "genre": "Jung Eun-ji,Lee Sung-yeol,Choi Yoon-young,Shin Ju-hwan",
+              "release_year": 2020,
+              "director": "Yu Seon-dong",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 167748,
+              "title": "00 Schneider - Im Wendekreis der Eidechse (2013)",
+              "genre": "Helge Schneider,Rocko Schamoni,Sergej Gleithmann,Peter Thoms,Pete York",
+              "release_year": 2017,
+              "director": "Helge Schneider",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 157110,
+              "title": "00 Schneider - Jagd auf Nihil Baxter (1994)",
+              "genre": "Helge Schneider,Helmut Körschgen,Andreas Kunze,Otto Van den Berg,Guenther Kordas",
+              "release_year": 2016,
+              "director": "Helge Schneider",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 101462,
+              "title": "03:34 Earthquake in Chile (03:34 Terremoto en Chile) (2011)",
+              "genre": "Marcelo Alonso, Andrea Freund, Fernando Gómez Rovira",
+              "release_year": 2013,
+              "director": "Juan Pablo Ternicier",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          },
+          {
+              "movie_id": 192097,
+              "title": "0.5mm (2014)",
+              "genre": "Sakura Ando,Junkichi Orimoto,Toshio Sakata,Masahiko Tsugawa,Akira Emoto",
+              "release_year": 2018,
+              "director": "Momoko Ando",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": 3
+          },
+          {
+              "movie_id": 204224,
+              "title": "07/27/1978 (2017)",
+              "genre": "John Blyth Barrymore",
+              "release_year": 2019,
+              "director": "Zachary Johnson",
+              "duration_min": null,
+              "poster": null,
+              "created_at": "2024-11-08T22:33:33.911034Z",
+              "updated_at": null,
+              "rating": null
+          }
+      ],
+      "total": 84660
+  }
+
+    setRecommendations(moviesList.movies);
   }, [currentUser]);
 
   return (
